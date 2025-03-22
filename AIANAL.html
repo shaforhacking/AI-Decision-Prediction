@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Decision & Prediction System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #e3f2fd;
+            text-align: left;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress {
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            border-radius: 5px;
+            background-color: #28a745;
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>AI Decision & Prediction System</h2>
+        <textarea id="situationInput" placeholder="Enter your situation here..." rows="4"></textarea>
+        <br>
+        <button onclick="analyzeSituation()">Analyze</button>
+        <button onclick="clearInput()">Clear</button>
+        <button onclick="generateSuggestion()">Get Random Advice</button>
+        <br>
+        <div id="output"></div>
+        <div class="progress-bar">
+            <div id="progress" class="progress">0%</div>
+        </div>
+    </div>
+
+    <script>
+        function analyzeSituation() {
+            let inputText = document.getElementById("situationInput").value.toLowerCase();
+            let outputDiv = document.getElementById("output");
+            let progressBar = document.getElementById("progress");
+            
+            if (!inputText) {
+                outputDiv.innerHTML = "<p>Please enter a situation to analyze.</p>";
+                return;
+            }
+            
+            let keywords = {
+                "investment": 80,
+                "risk": 60,
+                "opportunity": 85,
+                "career": 75,
+                "love": 70,
+                "health": 90,
+                "business": 80,
+                "startup": 78,
+                "failure": 40,
+                "success": 88,
+                "challenge": 65,
+                "finance": 82,
+                "growth": 87,
+                "loss": 30,
+                "strategy": 76,
+                "market": 70,
+                "technology": 80,
+                "future": 85,
+                "decision": 74,
+                "innovation": 86,
+                "competition": 72,
+                "economy": 79,
+                "scaling": 81,
+                "partnership": 77
+            };
+            
+            let probability = 50; // Default probability
+            let matchedKeywords = [];
+            
+            for (let key in keywords) {
+                if (inputText.includes(key)) {
+                    probability = (probability + keywords[key]) / 2;
+                    matchedKeywords.push(key);
+                }
+            }
+            
+            let outcome = "Neutral";
+            let color = "#ffc107"; // Yellow for neutral
+            if (probability > 80) {
+                outcome = "Very Favorable";
+                color = "#28a745"; // Green for positive
+            } else if (probability > 60) {
+                outcome = "Favorable";
+                color = "#17a2b8"; // Blue for moderate positive
+            } else if (probability > 40) {
+                outcome = "Uncertain";
+                color = "#ffc107"; // Yellow for neutral
+            } else {
+                outcome = "Risky";
+                color = "#dc3545"; // Red for risk
+            }
+            
+            progressBar.style.width = probability + "%";
+            progressBar.innerText = probability.toFixed(2) + "%";
+            progressBar.style.backgroundColor = color;
+            
+            let suggestions = "Consider gathering more data before making a decision.";
+            if (outcome === "Very Favorable") {
+                suggestions = "This looks like a great opportunity! Take action soon.";
+            } else if (outcome === "Favorable") {
+                suggestions = "Things look promising, but evaluate possible risks.";
+            } else if (outcome === "Uncertain") {
+                suggestions = "Be cautious, analyze alternatives before proceeding.";
+            } else if (outcome === "Risky") {
+                suggestions = "High risk detected! Proceed with a backup plan.";
+            }
+            
+            outputDiv.innerHTML = `
+                <h3>Analysis Result:</h3>
+                <p><strong>Detected Keywords:</strong> ${matchedKeywords.length ? matchedKeywords.join(", ") : "None"}</p>
+                <p><strong>Estimated Probability of Success:</strong> ${probability.toFixed(2)}%</p>
+                <p><strong>Outcome Prediction:</strong> ${outcome}</p>
+                <p><strong>Suggestions:</strong> ${suggestions}</p>
+            `;
+        }
+        
+        function clearInput() {
+            document.getElementById("situationInput").value = "";
+            document.getElementById("output").innerHTML = "";
+            document.getElementById("progress").style.width = "0%";
+            document.getElementById("progress").innerText = "0%";
+        }
+        
+        function generateSuggestion() {
+            let adviceList = [
+                "Always have a backup plan.",
+                "Take calculated risks, not blind ones.",
+                "Network with the right people to grow your opportunities.",
+                "Don't be afraid to pivot when needed.",
+                "Keep learning and improving your knowledge.",
+                "Measure progress regularly and adjust your strategy.",
+                "Make data-driven decisions rather than emotional ones."
+            ];
+            alert(adviceList[Math.floor(Math.random() * adviceList.length)]);
+        }
+    </script>
+</body>
+</html>
